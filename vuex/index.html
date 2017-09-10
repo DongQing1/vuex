@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<title>外卖网站</title>
+</head>
+<body>
+<!-- 定义容器元素 -->
+<div id="app">
+	<!-- 路由容器 -->
+	<router-view></router-view>
+</div>
+<template id="tpl_shop">
+	<div>
+		<header class="header">
+			<h1>{{shop.title}}</h1>
+			<p><img v-if="shop.logo" :src="'img/' + shop.logo" alt=""><span>{{shop.info}}</span></p>
+		</header>
+		<!-- 定义导航 -->
+		<div class="menu">
+			<!-- /store/dks/product/01 -->
+			<router-link v-for="item in menu" :to="'/store/' + shop.store + '/' + item.id" v-text="item.text" :key="item.id"></router-link>
+		</div>
+		<router-view></router-view>
+		<!-- 购物车 -->
+		<div class="shoping-car">
+			<span>共￥{{$store.state.num}}元</span>
+			<span class="ready">选好了</span>
+		</div>
+	</div>
+</template>
+<template id="tpl_product">
+	<div>
+		<div class="nav">
+			<!-- /store/dks/product/01 -->
+			<router-link v-for="(item, index) in nav" :to="'/store/' + $route.params.storeName + '/product/food/' + item.id" v-text="item.text" :key="index"></router-link>
+		</div>
+		<div class="content">
+			<router-view></router-view>
+		</div>
+	</div>
+</template>
+<template id="tpl_food">
+	<div>
+		<ul class="items">
+			<li v-for="item in list">
+				<img :src="'img/item/' + item.img" alt="">
+				<div class="container">
+					<h3>{{item.title}}</h3>
+					<p>已售{{item.sales}}份</p>
+					<p class="price">
+						<span class="price-value">￥{{item.price}}</span>
+						<span class="add" @click="add(item); $store.commit('add', item.price)">+</span>
+						<span class="num" v-show="item.num && item.num > 0">{{item.num}}</span>
+						<span class="reduce" v-show="item.num && item.num > 0" @click="reduce(item); $store.commit('reduce', item.price)">-</span>
+					</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+</template>
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/vue-router.js"></script>
+<script type="text/javascript" src="js/vue-resource.js"></script>
+<script type="text/javascript" src="js/vuex.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
